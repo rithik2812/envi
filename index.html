@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WasteWise+ — Smart Waste Segregation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    :root{
+      --leaf:#22c55e; --sky:#38bdf8; --text:#0f172a; --muted:#475569;
+      --border:#e6f4ea; --card:#ffffff; --shadow:0 18px 40px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    body{
+      margin:0; min-height:100vh;
+      background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOneSxHn0ldGqGjgrmTtm4UlbMy5EU51yRDA&s");
+      background-size:cover; background-position:center; background-repeat:no-repeat;
+      color:var(--text);
+    }
+    .overlay{
+      min-height:100vh;
+      background:linear-gradient(180deg, rgba(245,254,250,.92), rgba(236,253,245,.92));
+      padding:28px 18px;
+    }
+    .app{max-width:1100px;margin:0 auto}
+    header{
+      background:rgba(255,255,255,.96);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:22px 24px;
+      margin-bottom:22px;
+      box-shadow:var(--shadow);
+      display:grid; gap:10px;
+      backdrop-filter: blur(6px);
+    }
+    .title{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background:linear-gradient(135deg,var(--leaf),var(--sky));
+      display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff;
+      box-shadow:0 10px 22px rgba(34,197,94,.35);
+    }
+    h1{margin:0;font-size:26px;font-weight:800}
+    .subtitle{color:#334155;max-width:780px}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;
+      border:1px solid #bbf7d0;background:#f0fdf4;font-size:12px;color:#065f46;width:fit-content
+    }
+
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .search{display:flex;gap:10px;margin-top:6px}
+    input{
+      flex:1;padding:14px 16px;border-radius:12px;border:1.5px solid #bbf7d0;
+      font-size:16px; outline:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:12px center; padding-left:40px;
+    }
+    input:focus{border-color:#22c55e; box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+    button{
+      border:none;border-radius:12px;padding:14px 18px;font-weight:800;cursor:pointer;
+      background:linear-gradient(135deg,#22c55e,#16a34a);
+      color:#052e16; box-shadow:0 10px 22px rgba(34,197,94,.35);
+      transition:transform .1s ease, filter .1s ease;
+    }
+    button:hover{transform:translateY(-1px); filter:brightness(1.05)}
+
+    .result{display:grid;gap:12px;margin-top:10px}
+    .result p{padding:10px 0;border-bottom:1px dashed #e5e7eb}
+    .result p:last-child{border-bottom:none}
+
+    .badge{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:800;letter-spacing:.2px;box-shadow:0 6px 14px rgba(0,0,0,.08)}
+    .wet{background:#dcfce7;color:#166534;border:1px solid #86efac}
+    .dry{background:#e0f2fe;color:#075985;border:1px solid #7dd3fc}
+    .recycle{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+    .ewaste{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+
+    footer{margin-top:22px;color:#334155;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="app">
+      <header>
+        <div class="title">
+          <div class="logo">♻️</div>
+          <h1>WasteWise+</h1>
+        </div>
+        <div class="subtitle">
+          Type any household item to learn its correct disposal, why it matters, and environmental impact.
+        </div>
+        <div class="pill">Waste Segregation Made Simple</div>
+      </header>
+
+      <section class="grid">
+        <div class="card">
+          <h3>Check Disposal</h3>
+          <p class="subtitle">Try: plastic cup, old phone charger, banana peel, clothes, car glass</p>
+          <div class="search">
+            <input id="query" placeholder="Type an item…" />
+            <button id="searchBtn">Check</button>
+          </div>
+          <div class="pill" id="ecoFact" style="margin-top:10px">Loading eco fact…</div>
+        </div>
+
+        <div class="card">
+          <h3>Result</h3>
+          <div id="result" class="result">
+            <p class="pill">Enter an item to get guidance.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div>Designed to promote responsible waste segregation.</div>
+        <div>WasteWise+ • Hack for Humanity 2026</div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const DB = {
+      plastic:{bin:"Recycle",cls:"recycle",why:"Plastics should be recycled when clean.",time:"100–500 years",fact:"Plastic persists for centuries."},
+      glass:{bin:"Recycle",cls:"recycle",why:"Glass is infinitely recyclable.",time:"1 million+ years",fact:"Glass can be recycled endlessly."},
+      paper:{bin:"Recycle",cls:"recycle",why:"Recycling paper saves trees.",time:"2–6 weeks",fact:"Paper recycling uses less energy."},
+      cardboard:{bin:"Recycle",cls:"recycle",why:"Flatten boxes before recycling.",time:"2 months",fact:"Cardboard recycling reduces deforestation."},
+      metal:{bin:"Recycle",cls:"recycle",why:"Metals can be recycled multiple times.",time:"50–200 years",fact:"Metal recycling saves energy."},
+      aluminium:{bin:"Recycle",cls:"recycle",why:"Aluminium recycling saves 95% energy.",time:"80–200 years",fact:"Cans can be back in stores in 60 days."},
+      banana:{bin:"Wet",cls:"wet",why:"Compost food waste.",time:"2–5 weeks",fact:"Food waste emits methane in landfills."},
+      food:{bin:"Wet",cls:"wet",why:"Organic waste should be composted.",time:"1–3 months",fact:"Composting reduces landfill waste."},
+      battery:{bin:"E-waste",cls:"ewaste",why:"Batteries contain toxic metals.",time:"100+ years",fact:"Batteries pollute water if dumped."},
+      electronics:{bin:"E-waste",cls:"ewaste",why:"E-waste must be handled separately.",time:"100+ years",fact:"E-waste contains recoverable metals."},
+      clothes:{bin:"Dry",cls:"dry",why:"Textiles should be reused or donated.",time:"1–5 years",fact:"Clothing waste fills landfills."},
+      fabric:{bin:"Dry",cls:"dry",why:"Donate usable fabrics.",time:"1–5 years",fact:"Textile waste is rising globally."},
+      wood:{bin:"Dry",cls:"dry",why:"Untreated wood can be reused.",time:"1–3 years",fact:"Wood waste can be repurposed."},
+      rubber:{bin:"Dry",cls:"dry",why:"Rubber items can be reused.",time:"50–80 years",fact:"Rubber decomposes very slowly."},
+      styrofoam:{bin:"Dry",cls:"dry",why:"Avoid styrofoam where possible.",time:"500+ years",fact:"Styrofoam is a major pollutant."}
+    };
+
+    const KEYWORDS = [
+      ["plastic","cup","bottle","wrapper","bag","packet","poly","polythene"],
+      ["glass","jar","window","windshield","car glass"],
+      ["paper","newspaper","cardboard","carton","box","tissue","napkin"],
+      ["metal","iron","steel","tin","can","aluminium","foil"],
+      ["banana","peel","food","leftover","vegetable","fruit","eggshell"],
+      ["battery","phone","charger","laptop","earphone","tv","remote","electronics"],
+      ["cloth","clothes","fabric","shirt","jeans","towel","shoe","socks"],
+      ["wood","plywood","furniture","stick","board"],
+      ["rubber","tyre","tire","eraser","band"],
+      ["styrofoam","thermocol","foam"]
+    ];
+    const MAP=["plastic","glass","paper","metal","banana","battery","clothes","wood","rubber","styrofoam"];
+    const res=document.getElementById("result");
+    const q=document.getElementById("query");
+
+    function classify(s){
+      s=s.toLowerCase();
+      for(let i=0;i<KEYWORDS.length;i++){
+        for(const k of KEYWORDS[i]) if(s.includes(k)) return MAP[i];
+      }
+      return null;
+    }
+
+    document.getElementById("searchBtn").onclick=()=>{
+      const v=q.value.trim().toLowerCase();
+      if(!v){res.innerHTML='<p class="pill">Enter an item.</p>';return;}
+      const key=classify(v);
+      if(!key){res.innerHTML='<p class="pill">Item recognized but category unknown. Try: plastic, glass, clothes, battery.</p>';return;}
+      const i=DB[key];
+      res.innerHTML=`<span class="badge ${i.cls}">${i.bin} Bin</span>
+        <p><b>Why:</b> ${i.why}</p>
+        <p><b>Decomposition:</b> ${i.time}</p>
+        <p><b>Did you know?</b> ${i.fact}</p>`;
+    };
+
+    fetch("https://en.wikipedia.org/api/rest_v1/page/summary/Plastic_pollution")
+      .then(r=>r.json()).then(d=>{
+        document.getElementById("ecoFact").textContent=d.extract.slice(0,120)+"…";
+      }).catch(()=>{document.getElementById("ecoFact").textContent="Tip: Clean recyclables before recycling.";});
+  </script>
+</body>
+</html>
