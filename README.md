@@ -19,7 +19,7 @@ It improves upon traditional rule-based systems by leveraging **sentence embeddi
 
 ---
 
-## 🧠 Key Features
+##  Key Features
 
 *  **Semantic Classification** using Sentence Transformers
 *  **Cosine Similarity Matching** for category prediction
